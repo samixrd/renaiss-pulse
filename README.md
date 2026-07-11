@@ -1,10 +1,20 @@
 # Renaiss Pulse ⚽
 
-> What if you had a wallet that's AI-native, privacy-first, secure, fully
-> local, and open source? Renaiss Pulse is a self-custodial USDt wallet
-> for football expenses — reserve or spend money by talking to it, with
-> the AI running entirely on your own device and your own keys never
-> leaving your machine.
+> What if a wallet ran its own brain and never gave up your keys?
+>
+> Renaiss Pulse is a self-custodial USDt wallet you command in plain
+> English. Type "reserve 20 USDt for tickets" — a 1B-parameter language
+> model running entirely on your own device, offline, parses that into
+> a structured command. No cloud, no API key, nobody reading your
+> prompts. That command goes to a wallet layer that holds your keys
+> locally, checks it against your own spending rules, and waits for
+> your explicit signature before anything touches the blockchain. There
+> is no auto-sign path anywhere in this codebase.
+>
+> We built it around football because the Developers Cup asked us to.
+> But the architecture underneath isn't football-specific — it's a
+> hard, code-enforced boundary between AI and money. The AI layer never
+> sees a key, the wallet layer never sees a raw prompt.
 
 **Football-themed USDt savings assistant** for the [Tether Developers Cup](https://dorahacks.io/hackathon/tether-developers-cup/detail) hackathon — QVAC + WDK tracks.
 
