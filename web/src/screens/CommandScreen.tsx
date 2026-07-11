@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { postIntent, ApiError } from "../api/client";
 import ErrorBanner from "../components/ErrorBanner";
+import WalletStatusCard from "../components/WalletStatusCard";
+import SystemStatusBar from "../components/SystemStatusBar";
 import type { IntentResponse } from "../types";
 
 interface CommandScreenProps {
@@ -12,6 +14,14 @@ const EXAMPLES = [
   "Spend 5 USDt on travel expenses",
   "Reserve 50 USDt for merch",
 ];
+
+/** Return a time-appropriate greeting based on local hour. Pure computation. */
+function getGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  return "Good evening";
+}
 
 export default function CommandScreen({ onIntentParsed }: CommandScreenProps) {
   const [text, setText] = useState("");
@@ -40,23 +50,44 @@ export default function CommandScreen({ onIntentParsed }: CommandScreenProps) {
   }
 
   return (
-    <div className="space-y-6 relative">
+    /* Extra bottom padding so fixed SystemStatusBar never overlaps content */
+    <div className="space-y-5 relative pb-10">
       {/* Subtle Pitch Pattern Background */}
       <div className="absolute inset-0 bg-pitch-pattern opacity-[0.08] pointer-events-none rounded-xl" />
 
+      {/* ── 1. Wallet Status Card ───────────────────────────────────────── */}
       <div className="relative">
-        <h1 className="text-2xl font-bold tracking-tight">New Command</h1>
-        <p className="text-subtle text-sm mt-1">
-          Describe your financial intent in natural language. QVAC will parse it
-          on-device.
-        </p>
+        <WalletStatusCard />
       </div>
 
+      {/* ── 2. Empty-state greeting (only when input is empty) ──────────── */}
+      {!text && (
+        <div className="relative flex flex-col items-center gap-3 py-6 text-center select-none">
+          {/* Icon */}
+          <div className="w-14 h-14 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center shadow-lg shadow-accent/5">
+            <img src="/logo.png" alt="Renaiss Pulse" className="w-8 h-8 object-contain" />
+          </div>
+
+          {/* Greeting */}
+          <div>
+            <p className="text-xl font-bold tracking-tight text-content">
+              {getGreeting()} ⚽
+            </p>
+            <p className="text-sm text-subtle mt-1 max-w-xs leading-relaxed">
+              Describe what you want to reserve or spend, or try an example
+              below.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── 3. Error banner (existing, untouched) ───────────────────────── */}
       {error && (
         <ErrorBanner message={error} onDismiss={() => setError(null)} />
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      {/* ── 4. Form — textarea + submit (existing, untouched) ───────────── */}
+      <form onSubmit={handleSubmit} className="space-y-4 relative">
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -83,6 +114,7 @@ export default function CommandScreen({ onIntentParsed }: CommandScreenProps) {
         </button>
       </form>
 
+      {/* ── 5. Example pills (existing, untouched) ──────────────────────── */}
       <div className="relative">
         <p className="text-xs text-faint uppercase tracking-wider mb-2">
           Try an example
@@ -100,6 +132,9 @@ export default function CommandScreen({ onIntentParsed }: CommandScreenProps) {
           ))}
         </div>
       </div>
+
+      {/* ── 6. Fixed system status bar ──────────────────────────────────── */}
+      <SystemStatusBar />
     </div>
   );
 }
