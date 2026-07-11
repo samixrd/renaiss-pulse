@@ -63,7 +63,7 @@ Follow these steps to configure and run the application locally:
 1. **Prerequisites**: Ensure you have Node.js (LTS version) and npm installed.
 2. **Clone the repository**:
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/samixrd/renaiss-pulse
    cd renaiss-pulse
    ```
 3. **Install Dependencies**: Run `npm install` in the root folder, then run the installer in the frontend directory:
