@@ -86,38 +86,52 @@ This demonstrates QVAC running a genuinely useful 1B-parameter model on entry-le
 Follow these steps to configure and run the application locally:
 
 1. **Prerequisites**: Ensure you have Node.js (LTS version) and npm installed.
+
 2. **Clone the repository**:
    ```bash
    git clone https://github.com/samixrd/renaiss-pulse
    cd renaiss-pulse
    ```
-3. **Install Dependencies**: Run `npm install` in the root folder, then run the installer in the frontend directory:
+
+3. **Install Dependencies**: This project uses npm workspaces. A single install from the root covers both the backend and the `web/` frontend:
    ```bash
    npm install
-   cd web && npm install && cd ..
    ```
+
 4. **Environment Variables**: Copy `.env.example` to `.env`:
    ```bash
    cp .env.example .env
    ```
-5. **Set Up Wallet**: Generate your local encrypted wallet seed by running:
+   Open `.env` and fill in any optional values you need:
+   - `SPEND_RECIPIENT` — a Tron T-address that will receive funds on "spend" intents (required to test spend actions).
+   - `SPEND_LIMIT_*` — per-category USDt spend limits (defaults are set in `.env.example`).
+   - `TRON_NODE_URL` / `TRON_SOLIDITY_URL` / `TRON_EVENT_URL` / `TRON_CHAIN_ID` / `TRON_USDT_CONTRACT` — defaults to the **Shasta testnet**. Switch to Nile or Mainnet values as needed (see comments in `.env.example`).
+
+5. **Set Up Wallet**: Generate a fresh BIP-39 mnemonic and encrypt it into `.env`:
    ```bash
    npm run wallet:setup
    ```
-   *Note: This will output a 12-word mnemonic seed once. Back it up securely. The password and encrypted seed are written to `.env`. Never commit your `.env` file to version control.*
-6. **Fund Your Wallet**: Get free test tokens on the [Tron Nile Faucet](https://nileex.io/join/getJoinPage). Note that you need both **TRX** (for energy/fees) and **USDT** (to test transactions).
-7. **Start Backend**: Run the Express server in the root directory:
+   > ⚠️ **Important**: The 12-word mnemonic is printed **once** and never stored in plaintext. Write it down and keep it in a secure offline location before continuing. The script automatically writes `WALLET_ENCRYPTED_SEED` and `WALLET_PASSWORD` into your `.env` file.
+
+6. **Fund Your Wallet**: Copy your wallet address from the setup output (or run `GET /api/wallet/address` after the server starts), then get free test tokens:
+   - **Shasta testnet** (default): [Shasta Faucet](https://www.trongrid.io/shasta) — request both TRX (for fees/energy) and USDT.
+   - **Nile testnet**: [Nile Faucet](https://nileex.io/join/getJoinPage) — if you switched the `.env` URLs to Nile.
+
+7. **Start the App**: A single command starts both the backend (port `3001`) and the Vite frontend (port `5173`) concurrently:
    ```bash
    npm run dev
    ```
-   *(This starts the backend on `http://localhost:3001`)*
-8. **Start Frontend**: Open a separate terminal, navigate to `web/` and run the development server:
+   Or start them in separate terminals if you prefer:
    ```bash
-   cd web
-   npm run dev
+   # Terminal 1 — backend
+   npm run dev:backend
+
+   # Terminal 2 — frontend
+   npm run dev:web
    ```
-   *(This starts the frontend dashboard on `http://localhost:5173`)*
-9. **Open the Dashboard**: Navigate to `http://localhost:5173` in your browser.
+   > 💡 **First run**: The QVAC on-device model (`Llama-3.2-1B-Instruct-Q4_0`, ~737 MB) is downloaded and cached automatically on first startup. Subsequent starts use the cache and load in ~12 seconds.
+
+8. **Open the Dashboard**: Navigate to `http://localhost:5173` in your browser.
 
 ---
 
