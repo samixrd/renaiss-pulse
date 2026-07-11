@@ -123,7 +123,7 @@ Follow these steps to configure and run the application locally:
 
 ## Demo Video
 
-[Link will be added here]
+https://youtu.be/uRjYjGQJfFc
 
 ---
 
