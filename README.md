@@ -32,6 +32,21 @@ To maintain absolute security and user privacy, Renaiss Pulse enforces a strict 
 
 ---
 
+## Outside Services & Dependencies
+
+- **@qvac/sdk** (Tether's QVAC SDK) — Handles local AI inference on-device.
+- **Llama-3.2-1B-Instruct-Q4_0 model** — Downloaded via QVAC's model catalog, runs fully offline after initial download.
+- **@tetherto/wdk-wallet-tron** and related WDK packages — Manages self-custodial wallet creation and offline transaction signing.
+- **@tetherto/wdk-utils** — Encrypts the local wallet seed using AES-256-GCM.
+- **Tron Nile Testnet** (via `nile.trongrid.io`) — The blockchain network that transactions are broadcasted to.
+- **Nile testnet faucet** (`nileex.io`) — Used only for acquiring free test tokens during development, not part of the running app.
+- **Express** — Powers the backend HTTP server.
+- **React + Vite** — Used to build the frontend dashboard and command UI.
+- **Tailwind CSS v4** — Provides modular styling for the interface.
+- **lucide-react** — Icon library for the UI dashboard elements.
+
+---
+
 ## On-Device AI Performance
 
 | Metric | Value |
